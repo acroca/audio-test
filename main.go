@@ -26,7 +26,7 @@ func main() {
 type stereo struct {
 	*portaudio.Stream
 
-	channels []audioGen
+	channel audioGen
 }
 
 func newStereo() *stereo {
@@ -34,46 +34,44 @@ func newStereo() *stereo {
 	bpm := 130
 	samplesPerBeat := int(float32(sampleRate) / float32(float32(bpm)/60.0))
 
-	s.channels = []audioGen{
-		g.NewSum(
-			g.NewMul(
-				g.NewStop(1*samplesPerBeat),
-				g.NewSine(440, 440, sampleRate),
-			),
-			g.NewMul(
-				g.NewPause(1*samplesPerBeat),
-				g.NewStop(2*samplesPerBeat),
-				g.NewSum(
-					g.NewMul(
-						g.NewConst(1.0/2),
-						g.NewSine(440, 440, sampleRate),
-					),
-					g.NewMul(
-						g.NewConst(1.0/2),
-						g.NewSine(550, 550, sampleRate),
-					),
+	s.channel = g.NewSum(
+		g.NewMul(
+			g.NewStop(1*samplesPerBeat),
+			g.NewSine(440, 440, sampleRate),
+		),
+		g.NewMul(
+			g.NewPause(1*samplesPerBeat),
+			g.NewStop(2*samplesPerBeat),
+			g.NewSum(
+				g.NewMul(
+					g.NewConst(1.0/2),
+					g.NewSine(440, 440, sampleRate),
 				),
-			),
-			g.NewMul(
-				g.NewPause(2*samplesPerBeat),
-				g.NewStop(3*samplesPerBeat),
-				g.NewSum(
-					g.NewMul(
-						g.NewConst(1.0/3),
-						g.NewSine(440, 440, sampleRate),
-					),
-					g.NewMul(
-						g.NewConst(1.0/3),
-						g.NewSine(550, 550, sampleRate),
-					),
-					g.NewMul(
-						g.NewConst(1.0/3),
-						g.NewSine(660, 660, sampleRate),
-					),
+				g.NewMul(
+					g.NewConst(1.0/2),
+					g.NewSine(550, 550, sampleRate),
 				),
 			),
 		),
-	}
+		g.NewMul(
+			g.NewPause(2*samplesPerBeat),
+			g.NewStop(3*samplesPerBeat),
+			g.NewSum(
+				g.NewMul(
+					g.NewConst(1.0/3),
+					g.NewSine(440, 440, sampleRate),
+				),
+				g.NewMul(
+					g.NewConst(1.0/3),
+					g.NewSine(550, 550, sampleRate),
+				),
+				g.NewMul(
+					g.NewConst(1.0/3),
+					g.NewSine(660, 660, sampleRate),
+				),
+			),
+		),
+	)
 	var err error
 	s.Stream, err = portaudio.OpenDefaultStream(0, 2, sampleRate, 0, s.processAudio)
 	chk(err)
@@ -81,9 +79,7 @@ func newStereo() *stereo {
 }
 
 func (g *stereo) processAudio(out [][]float32) {
-	for _, channel := range g.channels {
-		channel.ProcessAudio(out)
-	}
+	g.channel.ProcessAudio(out)
 }
 
 func chk(err error) {
