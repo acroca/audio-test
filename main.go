@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/acroca/audio-test/generators"
+	g "github.com/acroca/audio-test/generators"
 	"github.com/gordonklaus/portaudio"
 )
 
@@ -19,7 +19,7 @@ func main() {
 	s := newStereo()
 	defer s.Close()
 	chk(s.Start())
-	time.Sleep(2 * time.Second)
+	time.Sleep(5 * time.Second)
 	chk(s.Stop())
 }
 
@@ -31,20 +31,46 @@ type stereo struct {
 
 func newStereo() *stereo {
 	s := &stereo{}
+	bpm := 130
+	samplesPerBeat := int(float32(sampleRate) / float32(float32(bpm)/60.0))
+
 	s.channels = []audioGen{
-		generators.NewSum(
-			// A, C#, and E
-			generators.NewMul(
-				generators.NewConst(1.0/3),
-				generators.NewSine(440, 440, sampleRate),
+		g.NewSum(
+			g.NewMul(
+				g.NewStop(1*samplesPerBeat),
+				g.NewSine(440, 440, sampleRate),
 			),
-			generators.NewMul(
-				generators.NewConst(1.0/3),
-				generators.NewSine(550, 550, sampleRate),
+			g.NewMul(
+				g.NewPause(1*samplesPerBeat),
+				g.NewStop(2*samplesPerBeat),
+				g.NewSum(
+					g.NewMul(
+						g.NewConst(1.0/2),
+						g.NewSine(440, 440, sampleRate),
+					),
+					g.NewMul(
+						g.NewConst(1.0/2),
+						g.NewSine(550, 550, sampleRate),
+					),
+				),
 			),
-			generators.NewMul(
-				generators.NewConst(1.0/3),
-				generators.NewSine(660, 660, sampleRate),
+			g.NewMul(
+				g.NewPause(2*samplesPerBeat),
+				g.NewStop(3*samplesPerBeat),
+				g.NewSum(
+					g.NewMul(
+						g.NewConst(1.0/3),
+						g.NewSine(440, 440, sampleRate),
+					),
+					g.NewMul(
+						g.NewConst(1.0/3),
+						g.NewSine(550, 550, sampleRate),
+					),
+					g.NewMul(
+						g.NewConst(1.0/3),
+						g.NewSine(660, 660, sampleRate),
+					),
+				),
 			),
 		),
 	}
