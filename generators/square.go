@@ -9,18 +9,18 @@ type Square struct {
 }
 
 // ProcessAudio processes the audio
-func (square *Square) ProcessAudio(out [][]float32) {
-	for i := range out[0] {
+func (square *Square) ProcessAudio(out [][2]float32) {
+	for i := range out {
 		if square.phaseL < 0.5 {
-			out[0][i] = 1
+			out[i][0] = 1
 		} else {
-			out[0][i] = -1
+			out[i][0] = -1
 		}
 		_, square.phaseL = math.Modf(square.phaseL + square.stepL)
 		if square.phaseR < 0.5 {
-			out[1][i] = 1
+			out[i][1] = 1
 		} else {
-			out[1][i] = -1
+			out[i][1] = -1
 		}
 		_, square.phaseR = math.Modf(square.phaseR + square.stepR)
 	}

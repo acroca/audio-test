@@ -6,17 +6,17 @@ type Pause struct {
 }
 
 // ProcessAudio processes the audio
-func (pause *Pause) ProcessAudio(out [][]float32) {
+func (pause *Pause) ProcessAudio(out [][2]float32) {
 	var o float32
-	for i := range out[0] {
+	for i := range out {
 		if pause.steps > 0 {
 			o = 0
 			pause.steps--
 		} else {
 			o = 1
 		}
-		out[0][i] = o
-		out[1][i] = o
+		out[i][0] = o
+		out[i][1] = o
 	}
 }
 

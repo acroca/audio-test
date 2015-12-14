@@ -11,10 +11,10 @@ type Adsr struct {
 }
 
 // ProcessAudio processes the audio
-func (adsr *Adsr) ProcessAudio(out [][]float32) {
-	for i := range out[0] {
-		out[0][i] = float32(adsr.val)
-		out[1][i] = float32(adsr.val)
+func (adsr *Adsr) ProcessAudio(out [][2]float32) {
+	for i := range out {
+		out[i][0] = float32(adsr.val)
+		out[i][1] = float32(adsr.val)
 		switch adsr.state {
 		case 0: // attack
 			adsr.a--

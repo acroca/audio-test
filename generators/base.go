@@ -2,5 +2,5 @@ package generators
 
 // Base is the interface implemented by all generators
 type Base interface {
-	ProcessAudio(out [][]float32)
+	ProcessAudio(out [][2]float32)
 }

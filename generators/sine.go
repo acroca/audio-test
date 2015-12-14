@@ -9,11 +9,11 @@ type Sine struct {
 }
 
 // ProcessAudio processes the audio
-func (sine *Sine) ProcessAudio(out [][]float32) {
-	for i := range out[0] {
-		out[0][i] = float32(math.Sin(2 * math.Pi * sine.phaseL))
+func (sine *Sine) ProcessAudio(out [][2]float32) {
+	for i := range out {
+		out[i][0] = float32(math.Sin(2 * math.Pi * sine.phaseL))
 		_, sine.phaseL = math.Modf(sine.phaseL + sine.stepL)
-		out[1][i] = float32(math.Sin(2 * math.Pi * sine.phaseR))
+		out[i][1] = float32(math.Sin(2 * math.Pi * sine.phaseR))
 		_, sine.phaseR = math.Modf(sine.phaseR + sine.stepR)
 	}
 }

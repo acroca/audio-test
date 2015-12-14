@@ -6,17 +6,17 @@ type Stop struct {
 }
 
 // ProcessAudio processes the audio
-func (stop *Stop) ProcessAudio(out [][]float32) {
+func (stop *Stop) ProcessAudio(out [][2]float32) {
 	var o float32
-	for i := range out[0] {
+	for i := range out {
 		if stop.steps > 0 {
 			o = 1
 			stop.steps--
 		} else {
 			o = 0
 		}
-		out[0][i] = o
-		out[1][i] = o
+		out[i][0] = o
+		out[i][1] = o
 	}
 }
 

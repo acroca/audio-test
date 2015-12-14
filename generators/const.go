@@ -6,10 +6,10 @@ type Const struct {
 }
 
 // ProcessAudio processes the audio
-func (c *Const) ProcessAudio(out [][]float32) {
-	for i := range out[0] {
-		out[0][i] = c.val
-		out[1][i] = c.val
+func (c *Const) ProcessAudio(out [][2]float32) {
+	for i := range out {
+		out[i][0] = c.val
+		out[i][1] = c.val
 	}
 }
 

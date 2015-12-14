@@ -7,17 +7,11 @@ type Sum struct {
 }
 
 // ProcessAudio processes the audio
-func (sum *Sum) ProcessAudio(out [][]float32) {
-	resA := make([][]float32, len(out))
-	for i := range out {
-		resA[i] = make([]float32, len(out[0]))
-	}
-	sum.a.ProcessAudio(resA)
+func (sum *Sum) ProcessAudio(out [][2]float32) {
+	resA := make([][2]float32, len(out))
+	resB := make([][2]float32, len(out))
 
-	resB := make([][]float32, len(out))
-	for i := range out {
-		resB[i] = make([]float32, len(out[0]))
-	}
+	sum.a.ProcessAudio(resA)
 	sum.b.ProcessAudio(resB)
 
 	for i := range out {

@@ -9,19 +9,19 @@ type Sawtooth struct {
 }
 
 // ProcessAudio processes the audio
-func (sawtooth *Sawtooth) ProcessAudio(out [][]float32) {
-	for i := range out[0] {
+func (sawtooth *Sawtooth) ProcessAudio(out [][2]float32) {
+	for i := range out {
 		if sawtooth.phaseL < 0.5 {
-			out[0][i] = float32(sawtooth.phaseL * 2)
+			out[i][0] = float32(sawtooth.phaseL * 2)
 		} else {
-			out[0][i] = float32(-1 + (2 * (sawtooth.phaseL - 0.5)))
+			out[i][0] = float32(-1 + (2 * (sawtooth.phaseL - 0.5)))
 		}
 		_, sawtooth.phaseL = math.Modf(sawtooth.phaseL + sawtooth.stepL)
 
 		if sawtooth.phaseR < 0.5 {
-			out[1][i] = float32(sawtooth.phaseR * 2)
+			out[i][1] = float32(sawtooth.phaseR * 2)
 		} else {
-			out[1][i] = float32(-1 + (2 * (sawtooth.phaseR - 0.5)))
+			out[i][1] = float32(-1 + (2 * (sawtooth.phaseR - 0.5)))
 		}
 		_, sawtooth.phaseR = math.Modf(sawtooth.phaseR + sawtooth.stepR)
 	}

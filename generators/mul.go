@@ -7,15 +7,9 @@ type Mul struct {
 }
 
 // ProcessAudio processes the audio
-func (mul *Mul) ProcessAudio(out [][]float32) {
-	resA := make([][]float32, len(out))
-	for i := range out {
-		resA[i] = make([]float32, len(out[i]))
-	}
-	resB := make([][]float32, len(out))
-	for i := range out {
-		resB[i] = make([]float32, len(out[i]))
-	}
+func (mul *Mul) ProcessAudio(out [][2]float32) {
+	resA := make([][2]float32, len(out))
+	resB := make([][2]float32, len(out))
 
 	mul.a.ProcessAudio(resA)
 	mul.b.ProcessAudio(resB)
